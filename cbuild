@@ -1,0 +1,20 @@
+#!/bin/sh
+if [[ $1 == '-s' ]]
+then
+	wine cmd /c pip install -r requirements.txt
+	wineserver -k
+	exit
+fi
+echo "Building for GNU/Linux..."
+pip3 install -r requirements.txt
+pip3 install pyinstaller
+pyinstaller --onefile $1
+rm -rf build
+rm -rf __pycache__
+rm -f *.spec
+echo "Building for windows under wine..."
+wine pyinstaller --onefile $1
+wineserver -k
+rm -rf build
+rm -rf __pycache__
+rm -f *.spec
