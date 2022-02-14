@@ -1,6 +1,6 @@
 #!/bin/bash
 set -o xtrace
-echo "Crossbuilder v0.0.2"
+echo "Crossbuilder v0.0.3"
 if [[ $1 == '-s' ]] || [[ $1 == '--setup' ]]
 then
 	wine cmd /c pip install -r requirements.txt >/dev/null 2>&1
@@ -10,6 +10,12 @@ elif [[ $2 == '-r' ]] || [[ $2 == '--remove' ]]
 then
 	echo "Removing..."
 	rm ~/.local/bin/$(echo $1 | sed 's/\.[^.]*$//')
+	exit
+elif [[ $2 == '-bi' ]] || [[ $2 == '--binary-install' ]]
+then
+	echo "Installing without compiling..."
+	mv $1 ~/.local/bin/
+	chmod +x ~/.local/bin/$1
 	exit
 fi
 
@@ -31,4 +37,5 @@ if [[ $2 == '-i' ]] || [[ $2 == '--install' ]]
 then
 	echo "Installing..."
 	mv dist/$(echo $1 | sed 's/\.[^.]*$//') ~/.local/bin/
+	chmod +x ~/.local/bin/$(echo $1 | sed 's/\.[^.]*$//')
 fi
