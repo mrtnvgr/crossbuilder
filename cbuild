@@ -1,6 +1,9 @@
 #!/bin/bash
-set -o xtrace
-echo "Crossbuilder v0.0.3"
+echo "Crossbuilder v0.0.4"
+if [[ $1 == '' ]]
+then
+	exit
+fi
 if [[ $1 == '-s' ]] || [[ $1 == '--setup' ]]
 then
 	wine cmd /c pip install -r requirements.txt >/dev/null 2>&1
@@ -20,19 +23,24 @@ then
 fi
 
 echo "Building for GNU/Linux..."
+set -x
 pip3 install -r requirements.txt >/dev/null 2>&1
 pip3 install pyinstaller >/dev/null 2>&1
 pyinstaller --onefile $1 >/dev/null 2>&1
 rm -rf build
 rm -rf __pycache__
 rm -f *.spec
+
+set +x > /dev/null 2>&1
 echo "Building for windows under wine..."
+set -x
 wine pyinstaller --onefile $1 >/dev/null 2>&1
 wineserver -k
 rm -rf build
 rm -rf __pycache__
 rm -f *.spec
 
+set +x > /dev/null 2>&1
 if [[ $2 == '-i' ]] || [[ $2 == '--install' ]]
 then
 	echo "Installing..."
