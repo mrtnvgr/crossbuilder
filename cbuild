@@ -1,20 +1,34 @@
-#!/bin/sh
-if [[ $1 == '-s' ]]
+#!/bin/bash
+set -o xtrace
+echo "Crossbuilder v0.0.2"
+if [[ $1 == '-s' ]] || [[ $1 == '--setup' ]]
 then
-	wine cmd /c pip install -r requirements.txt
+	wine cmd /c pip install -r requirements.txt >/dev/null 2>&1
 	wineserver -k
 	exit
+elif [[ $2 == '-r' ]] || [[ $2 == '--remove' ]]
+then
+	echo "Removing..."
+	rm ~/.local/bin/$(echo $1 | sed 's/\.[^.]*$//')
+	exit
 fi
+
 echo "Building for GNU/Linux..."
-pip3 install -r requirements.txt
-pip3 install pyinstaller
-pyinstaller --onefile $1
+pip3 install -r requirements.txt >/dev/null 2>&1
+pip3 install pyinstaller >/dev/null 2>&1
+pyinstaller --onefile $1 >/dev/null 2>&1
 rm -rf build
 rm -rf __pycache__
 rm -f *.spec
 echo "Building for windows under wine..."
-wine pyinstaller --onefile $1
+wine pyinstaller --onefile $1 >/dev/null 2>&1
 wineserver -k
 rm -rf build
 rm -rf __pycache__
 rm -f *.spec
+
+if [[ $2 == '-i' ]] || [[ $2 == '--install' ]]
+then
+	echo "Installing..."
+	mv dist/$(echo $1 | sed 's/\.[^.]*$//') ~/.local/bin/
+fi
