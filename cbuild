@@ -1,12 +1,38 @@
 #!/bin/bash
-echo "Crossbuilder v0.0.4"
+echo "Crossbuilder v0.0.5"
 if [[ $1 == '' ]]
 then
 	exit
 fi
-if [[ $1 == '-s' ]] || [[ $1 == '--setup' ]]
+
+
+if [[ $1 == '-u' ]] || [[ $1 == '--update' ]]
 then
+	echo "Updating..."
+	curl https://raw.githubusercontent.com/mrtnvgr/crossbuilder/main/cbuild --output cbuild_new >/dev/null 2>&1
+	mv ./cbuild_new ~/.local/bin/cbuild
+	chmod +x ~/.local/bin/cbuild
+	exit
+elif [[ $1 == '-fs' ]] || [[ $1 == '--first-setup' ]]
+then
+	curl https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks --output winetricks >/dev/null 2>&1
+	chmod +x winetricks
+	./winetricks dotnet40 >/dev/null 2>&1
+	winecfg -v win10 >/dev/null 2>&1
+	read -p 'Python version: ' pythonver
+	curl https://www.python.org/ftp/python/$pythonver/python-$pythonver.exe --output python.exe >/dev/null 2>&1
+	wine python.exe /quiet InstallAllUsers=1 PrependPath=1 >/dev/null 2>&1
+	wine cmd /c pip install pyinstaller >/dev/null 2>&1
+	wineserver -k
+	rm python.exe winetricks
+	exit
+elif [[ $1 == '-s' ]] || [[ $1 == '--setup' ]]
+then
+	echo "Setting up..."
+	pip3 install -r requirements.txt >/dev/null 2>&1
+	pip3 install pyinstaller >/dev/null 2>&1
 	wine cmd /c pip install -r requirements.txt >/dev/null 2>&1
+	wine cmd /c pip install pyinstaller >/dev/null 2>&1
 	wineserver -k
 	exit
 elif [[ $2 == '-r' ]] || [[ $2 == '--remove' ]]
@@ -24,8 +50,6 @@ fi
 
 echo "Building for GNU/Linux..."
 set -x
-pip3 install -r requirements.txt >/dev/null 2>&1
-pip3 install pyinstaller >/dev/null 2>&1
 pyinstaller --onefile $1 >/dev/null 2>&1
 rm -rf build
 rm -rf __pycache__
