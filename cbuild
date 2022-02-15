@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Crossbuilder v0.0.5"
+echo "Crossbuilder v0.0.6"
 if [[ $1 == '' ]]
 then
 	exit
@@ -48,6 +48,11 @@ then
 	exit
 fi
 
+echo "Cleaning up..."
+set -x
+rm -rf dist
+
+set +x
 echo "Building for GNU/Linux..."
 set -x
 pyinstaller --onefile $1 >/dev/null 2>&1
