@@ -1,4 +1,4 @@
-## **crossbuilder** - simple cross-platform python compiler and package manager
+## **crossbuilder** - simple cross-platform python compiler and package installer
 ### **General**:
 #### **Install:**
 ```
