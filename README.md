@@ -17,7 +17,7 @@ cbuild -fs
 #### **Install with compiling:** `cbuild <package-name> -i`
 #### **Install without compiling:** `cbuild <package-name> -bi`
 #### **Remove:** `cbuild <package-name> -r`
-
+#### **Cleanup:** `cbuild -c`
 -----
 
 ### **Uninstall:** `cbuild cbuild -r`

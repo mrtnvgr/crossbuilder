@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Crossbuilder v0.0.6"
+echo "Crossbuilder v0.0.7"
 if [[ $1 == '' ]]
 then
 	exit
@@ -9,16 +9,19 @@ fi
 if [[ $1 == '-u' ]] || [[ $1 == '--update' ]]
 then
 	echo "Updating..."
+	set -x
 	curl https://raw.githubusercontent.com/mrtnvgr/crossbuilder/main/cbuild --output cbuild_new >/dev/null 2>&1
 	mv ./cbuild_new ~/.local/bin/cbuild
 	chmod +x ~/.local/bin/cbuild
 	exit
 elif [[ $1 == '-fs' ]] || [[ $1 == '--first-setup' ]]
 then
+	set -x
 	curl https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks --output winetricks >/dev/null 2>&1
 	chmod +x winetricks
 	./winetricks dotnet40 >/dev/null 2>&1
 	winecfg -v win10 >/dev/null 2>&1
+	clear
 	read -p 'Python version: ' pythonver
 	curl https://www.python.org/ftp/python/$pythonver/python-$pythonver.exe --output python.exe >/dev/null 2>&1
 	wine python.exe /quiet InstallAllUsers=1 PrependPath=1 >/dev/null 2>&1
@@ -29,6 +32,7 @@ then
 elif [[ $1 == '-s' ]] || [[ $1 == '--setup' ]]
 then
 	echo "Setting up..."
+	set -x
 	pip3 install -r requirements.txt >/dev/null 2>&1
 	pip3 install pyinstaller >/dev/null 2>&1
 	wine cmd /c pip install -r requirements.txt >/dev/null 2>&1
@@ -38,13 +42,21 @@ then
 elif [[ $2 == '-r' ]] || [[ $2 == '--remove' ]]
 then
 	echo "Removing..."
+	set -x
 	rm ~/.local/bin/$(echo $1 | sed 's/\.[^.]*$//')
 	exit
 elif [[ $2 == '-bi' ]] || [[ $2 == '--binary-install' ]]
 then
 	echo "Installing without compiling..."
+	set -x
 	mv $1 ~/.local/bin/
 	chmod +x ~/.local/bin/$1
+	exit
+elif [[ $1 == '-c' ]] || [[ $1 == '--clean' ]]
+then
+	echo "Cleaning up..."
+	set -x
+	rm -rf dist
 	exit
 fi
 
