@@ -1,7 +1,17 @@
 #!/bin/bash
-echo "Crossbuilder v0.0.7"
+echo "Crossbuilder v0.0.8"
 if [[ $1 == '' ]]
 then
+	exit
+elif [[ $1 == '-h' ]] || [[ $1 == '--help' ]]
+then
+	echo "Update: cbuild -u"
+	echo "Requirments setup: cbuild -s"
+	echo "Compile: cbuild <name>"
+	echo "Install with compiling: cbuild <name> -i"
+	echo "Install without compiling: cbuild <name> -bi"
+	echo "Uninstall: cbuild <name> -r"
+	echo "Cleanup: cbuild -c"
 	exit
 fi
 

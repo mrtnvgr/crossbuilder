@@ -12,12 +12,12 @@ cbuild -fs
 -----
 
 ### **Package management**:
-#### **Dependencies setup:** `cbuild -s`
+#### **Requirements setup:** `cbuild -s`
 #### **Compile:** `cbuild <package-name>`
 #### **Install with compiling:** `cbuild <package-name> -i`
 #### **Install without compiling:** `cbuild <package-name> -bi`
-#### **Remove:** `cbuild <package-name> -r`
+#### **Uninstall:** `cbuild <package-name> -r`
 #### **Cleanup:** `cbuild -c`
 -----
 
-### **Uninstall:** `cbuild cbuild -r`
+### **Uninstall cbuild:** `cbuild cbuild -r`
